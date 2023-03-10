@@ -1,0 +1,15 @@
+# Logs
+dist/
+node_modules
+build
+npm-debug.log
+.nyc
+.DS_Store
+.eslintrc.cjs
+.idea
+
+# Some important files
+.env
+./src/config/firebase_config.ts
+
+
