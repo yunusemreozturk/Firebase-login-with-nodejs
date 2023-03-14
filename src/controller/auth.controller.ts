@@ -1,4 +1,11 @@
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword, User, sendPasswordResetEmail} from "firebase/auth";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    User,
+    sendPasswordResetEmail,
+    GoogleAuthProvider,
+    signInWithCredential
+} from "firebase/auth";
 import {auth} from "../config/firebase_config.js";
 import MyResponse from "../utils/my_response.js";
 import APIError from "../utils/api_error.js";
@@ -13,7 +20,7 @@ const login = async (req, res) => {
 
             return new MyResponse(user).created(res);
         }).catch((error) => {
-            throw new APIError(error.code, 40);
+            throw new APIError(error.code, 400);
         });
 }
 
@@ -44,4 +51,15 @@ const passwordReset = async (req, res) => {
 
 }
 
-export {login, register, passwordReset}
+const googleSignIn = async (req, res) => {
+    const {id} = req.body
+    const credential = GoogleAuthProvider.credential(id);
+
+    signInWithCredential(auth, credential).then(() => {
+        return new MyResponse(req.body).success(res);
+    }).catch((error) => {
+        throw new APIError(error.code, 400);
+    });
+}
+
+export {login, register, passwordReset, googleSignIn}
